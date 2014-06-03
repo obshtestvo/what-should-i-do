@@ -5,7 +5,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import bg.obshtestvo.rest.controllers.UserController;
 
