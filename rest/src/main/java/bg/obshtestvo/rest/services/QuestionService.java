@@ -2,25 +2,28 @@ package bg.obshtestvo.rest.services;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import bg.obshtestvo.rest.controllers.UserController;
+import bg.obshtestvo.rest.controllers.QuestionController;
 
-@Path("users")
-public class UserService {
+@Path("questions")
+public class QuestionService {
 
 	@Autowired
-	private UserController userController;
-
+	private QuestionController questionController;
+	
 	@GET
-	public Response getUsers() {
+	@Path("/{id}")
+	public Response getUsers(@PathParam("id") int id) {
 		
-		return Response.ok(userController.getGreeting()) 
+		return Response.ok(questionController.getQuestion(id)) 
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
 				.build();
 	}
+	
 }
