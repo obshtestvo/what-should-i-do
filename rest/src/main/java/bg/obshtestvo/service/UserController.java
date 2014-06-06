@@ -1,4 +1,4 @@
-package bg.obshtestvo.rest.controllers;
+package bg.obshtestvo.service;
 
 public interface UserController {
 	

@@ -1,4 +1,4 @@
-package bg.obshtestvo.rest.services;
+package bg.obshtestvo.rest.controller;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import bg.obshtestvo.rest.controllers.QuestionController;
+import bg.obshtestvo.service.QuestionController;
 
 @Path("questions")
 public class QuestionService {

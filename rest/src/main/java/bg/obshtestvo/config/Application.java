@@ -1,14 +1,11 @@
-package bg.obshtestvo.rest;
+package bg.obshtestvo.config;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 
-/**
- * Hello world!
- * 
- */
 public class Application extends ResourceConfig{
 	public Application() {
+		//Jersey - Spring bridge
 		register(RequestContextFilter.class);
 	}
 }

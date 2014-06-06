@@ -18,7 +18,7 @@
         </init-param>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
-            <param-value>bg.obshtestvo.rest.Application</param-value>
+            <param-value>bg.obshtestvo.config.Application</param-value>
         </init-param>
 	    <load-on-startup>1</load-on-startup>
 	 </servlet>
@@ -29,9 +29,16 @@
 	 </servlet-mapping>
 	 
 	 <context-param>
-		 <param-name>contextConfigLocation</param-name>
-		 <param-value>/WEB-INF/application-context.xml</param-value>
-	 </context-param>
+        <param-name>contextClass</param-name>
+        <param-value>
+            org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+        </param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>bg.obshtestvo.config.ApplicationContext</param-value>
+    </context-param>
 	 
 	 <listener>
 		 <listener-class>
