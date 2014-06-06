@@ -1,4 +1,4 @@
-package bg.obshtestvo.rest.service;
+package bg.obshtestvo.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
