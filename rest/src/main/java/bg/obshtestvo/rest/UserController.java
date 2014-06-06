@@ -7,9 +7,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import bg.obshtestvo.service.UserService;
 
+@Component
 @Path("users")
 public class UserController {
 

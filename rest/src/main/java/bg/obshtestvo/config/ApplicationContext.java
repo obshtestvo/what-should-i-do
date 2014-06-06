@@ -17,10 +17,9 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 @Configuration
-@ComponentScan(basePackages = { "bg.obshtestvo.rest.controllers",
-		"bg.obshtestvo.dao" })
+@ComponentScan(basePackages = { "bg.obshtestvo.rest", "bg.obshtestvo.service" })
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories
+@EnableJpaRepositories(basePackages = {"bg.obshtestvo.repository"})
 public class ApplicationContext {
 	private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
 	private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
