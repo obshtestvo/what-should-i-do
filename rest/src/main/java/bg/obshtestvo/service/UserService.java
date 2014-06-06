@@ -1,6 +1,6 @@
 package bg.obshtestvo.service;
 
-public interface UserController {
+public interface UserService {
 	
 	/**
 	 * Dummy method to test the Jersey-Spring integration

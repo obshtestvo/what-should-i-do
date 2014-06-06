@@ -1,5 +1,5 @@
 package bg.obshtestvo.service;
 
-public interface QuestionController {
+public interface QuestionService {
 	String getQuestion(int id);
 }
