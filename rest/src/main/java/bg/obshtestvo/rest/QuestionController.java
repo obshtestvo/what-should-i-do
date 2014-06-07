@@ -11,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import bg.obshtestvo.service.QuestionService;
+import bg.obshtestvo.service.ItemService;
 
 @Component
 @Path("questions")
 public class QuestionController {
 
 	@Autowired
-	private QuestionService questionService;
+	private ItemService questionService;
 	
 	@GET
 	@Path("/{id}")

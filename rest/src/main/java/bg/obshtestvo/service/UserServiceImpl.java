@@ -23,7 +23,4 @@ public class UserServiceImpl implements UserService {
 		
 		return userDetailsRepository.save(user);
 	}
-	
-	
-	
 }

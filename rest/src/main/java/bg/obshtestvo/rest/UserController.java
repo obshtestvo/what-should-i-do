@@ -45,6 +45,5 @@ public class UserController {
 		return Response.ok(gson.toJson(userService.registerUser(looser)))
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
 				.build();
-//		return Response.serverError().build();
 	}
 }

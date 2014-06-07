@@ -1,48 +1,64 @@
 package bg.obshtestvo.model;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "user")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@Column(name = "id")
+	private Long userId;
 	
-	@Column(name = "username", nullable = false)
+	@Column(name = "username", nullable = false, unique = true)
 	private String username;
+	
 	@Column(name = "password", nullable = false)
 	private String password;
+	
 	@Column(name = "firstName")
 	private String firstName;
+	
 	@Column(name = "lastName")
 	private String lastName;
+	
 	@Column(name = "email")
 	private String email;
-	@Column(name = "birthDate")
-	private Date birthDate;
 	
-	public User(String username, String password, String firstName, String lastName, String email, Date birthDate) {
+	@Column(name = "age")
+	private Integer age;
+	
+	@OneToMany(mappedBy = "author")
+	private List<Item> items;
+
+	@OneToMany(mappedBy = "author")
+	private List<Answer> answers;
+	
+	public User(String username, String password, String firstName,
+			String lastName, String email, Integer age) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.birthDate = birthDate;
+		this.setAge(age);
 	}
 
-	public Long getId() {
-		return id;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getUsername() {
@@ -85,11 +101,20 @@ public class User {
 		this.email = email;
 	}
 
-	public Date getBirthDate() {
-		return birthDate;
+	public Integer getAge() {
+		return age;
 	}
 
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+	public void setAge(Integer age) {
+		this.age = age;
 	}
+
+	public List<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
+	}
+
 }
