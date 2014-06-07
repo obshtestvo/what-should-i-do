@@ -1,5 +1,7 @@
 package bg.obshtestvo.service;
 
+import bg.obshtestvo.model.UserSecurityDetails;
+
 public interface UserService {
 	
 	/**
@@ -7,4 +9,6 @@ public interface UserService {
 	 * @return
 	 */
 	String getGreeting();
+	
+	UserSecurityDetails registerUser(UserSecurityDetails user);
 }

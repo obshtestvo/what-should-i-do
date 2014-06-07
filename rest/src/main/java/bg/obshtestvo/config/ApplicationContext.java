@@ -17,9 +17,10 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 @Configuration
-@ComponentScan(basePackages = { "bg.obshtestvo.rest", "bg.obshtestvo.service" })
+@ComponentScan(basePackages = { "bg.obshtestvo", "bg.obshtestvo.rest",
+		"bg.obshtestvo.service" })
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories(basePackages = {"bg.obshtestvo.repository"})
+@EnableJpaRepositories(basePackages = { "bg.obshtestvo.repository" })
 public class ApplicationContext {
 	private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
 	private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
@@ -31,6 +32,7 @@ public class ApplicationContext {
 	private static final String PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY = "hibernate.ejb.naming_strategy";
 	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 	private static final String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
+	private static final String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
 
 	@Resource
 	private Environment environment;
@@ -76,6 +78,8 @@ public class ApplicationContext {
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY));
 		jpaProterties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, environment
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+		jpaProterties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, environment
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
 
 		entityManagerFactoryBean.setJpaProperties(jpaProterties);
 

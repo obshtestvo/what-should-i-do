@@ -1,6 +1,7 @@
 package bg.obshtestvo.model;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Entity;
 
@@ -9,6 +10,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 public class UserSecurityDetails extends User implements UserDetails {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public UserSecurityDetails(String username, String password,
+			String firstName, String lastName, String email, Date birthDate) {
+		super(username, password, firstName, lastName, email, birthDate);
+
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
