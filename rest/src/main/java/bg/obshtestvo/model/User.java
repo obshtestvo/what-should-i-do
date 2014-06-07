@@ -9,7 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 @Entity
 @Table(name = "user")
 public class User {
@@ -37,11 +39,15 @@ public class User {
 	@Column(name = "age")
 	private Integer age;
 	
-	@OneToMany(mappedBy = "author")
-	private List<Item> items;
+	/*@OneToMany(mappedBy = "author")*/
+	/*private List<Item> items;*/
 
-	@OneToMany(mappedBy = "author")
-	private List<Answer> answers;
+	/*@OneToMany(mappedBy = "author")*/
+/*	private List<Answer> answers;
+*/	
+	public User() {
+		
+	}
 	
 	public User(String username, String password, String firstName,
 			String lastName, String email, Integer age) {
@@ -109,12 +115,12 @@ public class User {
 		this.age = age;
 	}
 
-	public List<Answer> getAnswers() {
+/*	public List<Answer> getAnswers() {
 		return answers;
 	}
 
 	public void setAnswers(List<Answer> answers) {
 		this.answers = answers;
-	}
+	}*/
 
 }

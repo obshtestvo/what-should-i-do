@@ -15,6 +15,10 @@ public class UserSecurityDetails extends User implements UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	public UserSecurityDetails() {
+		
+	}
+
 	public UserSecurityDetails(String username, String password,
 			String firstName, String lastName, String email, Integer age) {
 		super(username, password, firstName, lastName, email, age);

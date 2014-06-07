@@ -1,5 +1,7 @@
 package bg.obshtestvo.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
@@ -19,8 +21,26 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserSecurityDetails registerUser(UserSecurityDetails user) {
+	public UserSecurityDetails createOrUpdateUser(UserSecurityDetails user) {
 		
 		return userDetailsRepository.save(user);
+	}
+
+	@Override
+	public void removeUser(int id) {
+		
+		userDetailsRepository.delete((long) id);
+	}
+
+	@Override
+	public List<UserSecurityDetails> getAllUsers() {
+		
+		return userDetailsRepository.findAll();
+	}
+
+	@Override
+	public UserSecurityDetails getUser(int id) {
+		
+		return userDetailsRepository.findOne((long) id);
 	}
 }

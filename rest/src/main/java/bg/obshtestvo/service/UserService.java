@@ -1,5 +1,7 @@
 package bg.obshtestvo.service;
 
+import java.util.List;
+
 import bg.obshtestvo.model.UserSecurityDetails;
 
 public interface UserService {
@@ -10,5 +12,11 @@ public interface UserService {
 	 */
 	String getGreeting();
 	
-	UserSecurityDetails registerUser(UserSecurityDetails user);
+	UserSecurityDetails createOrUpdateUser(UserSecurityDetails user);
+	
+	void removeUser(int id);
+	
+	List<UserSecurityDetails> getAllUsers();
+	
+	UserSecurityDetails getUser(int id);
 }
