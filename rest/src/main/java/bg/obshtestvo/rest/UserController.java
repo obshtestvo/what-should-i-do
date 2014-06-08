@@ -13,12 +13,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import bg.obshtestvo.model.UserSecurityDetails;
+import bg.obshtestvo.model.User;
 import bg.obshtestvo.service.UserService;
-
-import com.google.gson.Gson;
 
 @Component
 @Path("users")
@@ -26,15 +26,13 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-//	@Autowired
-//	private UserSecurityDetails userSecurityDetailsService;
+
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllUsers() {
 		
-		Gson gson = new Gson();
-		return Response.ok(gson.toJson(userService.getAllUsers())) 
+		return Response.ok(userService.getAllUsers()) 
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
 				.build();
 	}
@@ -44,8 +42,7 @@ public class UserController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserById(@PathParam("id") int id) {
 		
-		Gson gson = new Gson();
-		return Response.ok(gson.toJson(userService.getUser(id))) 
+		return Response.ok(userService.getUser(id)) 
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
 				.build();
 	}
@@ -54,14 +51,15 @@ public class UserController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response registerUser(String user) {
+	public Response registerUser(User user) {
 		
-		Gson gson = new Gson();
-		UserSecurityDetails looser = gson.fromJson(user, UserSecurityDetails.class);
-		return Response.ok(gson.toJson(userService.createOrUpdateUser(looser)))
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		return Response.ok(userService.createOrUpdateUser(user))
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
 				.build();
 	}
+	 
 	
 	@Path("/{id}")
 	@DELETE
@@ -73,11 +71,9 @@ public class UserController {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateUser(String user) {
+	public Response updateUser(User user) {
 		
-		Gson gson = new Gson();
-		UserSecurityDetails looser = gson.fromJson(user, UserSecurityDetails.class);
-		return Response.ok(gson.toJson(userService.createOrUpdateUser(looser)))
+		return Response.ok(userService.createOrUpdateUser(user))
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
 				.build();
 	}

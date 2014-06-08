@@ -33,8 +33,7 @@ public class UserSecurityDetails extends User implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getPassword();
 	}
 
 	@Override

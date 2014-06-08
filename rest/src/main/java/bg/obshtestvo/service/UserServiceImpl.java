@@ -6,14 +6,14 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import bg.obshtestvo.model.UserSecurityDetails;
-import bg.obshtestvo.repository.UserSecurityDetailsRepository;
+import bg.obshtestvo.model.User;
+import bg.obshtestvo.repository.UserRepository;
 
 @Component
 public class UserServiceImpl implements UserService {
 
 	@Resource
-	private UserSecurityDetailsRepository userDetailsRepository;
+	private UserRepository userRepository;
 	
 	@Override
 	public String getGreeting() {
@@ -21,26 +21,26 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserSecurityDetails createOrUpdateUser(UserSecurityDetails user) {
+	public User createOrUpdateUser(User user) {
 		
-		return userDetailsRepository.save(user);
+		return userRepository.save(user);
 	}
 
 	@Override
 	public void removeUser(int id) {
 		
-		userDetailsRepository.delete((long) id);
+		userRepository.delete((long) id);
 	}
 
 	@Override
-	public List<UserSecurityDetails> getAllUsers() {
+	public List<User> getAllUsers() {
 		
-		return userDetailsRepository.findAll();
+		return userRepository.findAll();
 	}
 
 	@Override
-	public UserSecurityDetails getUser(int id) {
+	public User getUser(int id) {
 		
-		return userDetailsRepository.findOne((long) id);
+		return userRepository.findOne((long) id);
 	}
 }
