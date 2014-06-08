@@ -3,6 +3,7 @@ package bg.obshtestvo.rest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -14,11 +15,11 @@ import org.springframework.stereotype.Component;
 import bg.obshtestvo.service.ItemService;
 
 @Component
-@Path("questions")
-public class QuestionController {
+@Path("items")
+public class ItemController {
 
 	@Autowired
-	private ItemService questionService;
+	private ItemService itemService;
 	
 	@GET
 	@Path("/{id}")
@@ -26,6 +27,15 @@ public class QuestionController {
 	public Response getUsers(@PathParam("id") int id) {
 		
 		return Response.ok("penis")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
+				.build();
+	}
+	
+	
+	@GET
+	@Path("/search")
+	public Response findItem(@QueryParam("q") String searchString) {
+		return Response.ok(itemService.findItems(searchString))
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
 				.build();
 	}

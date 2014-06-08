@@ -4,12 +4,16 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @XmlRootElement
 @Entity
@@ -39,12 +43,14 @@ public class User {
 	@Column(name = "age")
 	private Integer age;
 	
-	/*@OneToMany(mappedBy = "author")*/
-	/*private List<Item> items;*/
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Item> items;
 
-	/*@OneToMany(mappedBy = "author")*/
-/*	private List<Answer> answers;
-*/	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Answer> answers;
+	
 	public User() {
 		
 	}
@@ -115,12 +121,12 @@ public class User {
 		this.age = age;
 	}
 
-/*	public List<Answer> getAnswers() {
+	public List<Answer> getAnswers() {
 		return answers;
 	}
 
 	public void setAnswers(List<Answer> answers) {
 		this.answers = answers;
-	}*/
+	}
 
 }

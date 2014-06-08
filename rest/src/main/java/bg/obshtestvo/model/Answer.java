@@ -32,7 +32,7 @@ public class Answer {
 	
 	@ManyToOne
 	@JoinColumn(name = "author_id")
-	private User author;
+	private UserSecurityDetails author;
 
 	@ManyToMany(mappedBy = "answers")
 	private List<Item> items;
@@ -53,11 +53,11 @@ public class Answer {
 		this.content = content;
 	}
 
-	public User getAuthor() {
+	public UserSecurityDetails getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(UserSecurityDetails author) {
 		this.author = author;
 	}
 
