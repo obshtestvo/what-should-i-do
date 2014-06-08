@@ -1,7 +1,5 @@
 package bg.obshtestvo.service;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import bg.obshtestvo.model.UserSecurityDetails;
 import bg.obshtestvo.repository.UserSecurityDetailsRepository;
 
 @Component

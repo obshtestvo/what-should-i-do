@@ -51,6 +51,13 @@ public class User {
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Answer> answers;
 	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userId")
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Vote> votes;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
+	private List<Comment> comments;
+	
 	public User() {
 		
 	}
@@ -127,6 +134,22 @@ public class User {
 
 	public void setAnswers(List<Answer> answers) {
 		this.answers = answers;
+	}
+
+	public List<Vote> getVotes() {
+		return votes;
+	}
+
+	public void setVotes(List<Vote> votes) {
+		this.votes = votes;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 }

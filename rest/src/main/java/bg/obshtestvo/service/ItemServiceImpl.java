@@ -6,7 +6,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import org.apache.lucene.search.Query;
 import org.hibernate.CacheMode;
@@ -17,14 +16,15 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
-import org.hibernate.search.impl.FullTextSessionImpl;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import bg.obshtestvo.model.Answer;
 import bg.obshtestvo.model.Item;
+import bg.obshtestvo.repository.AnswerRepository;
 import bg.obshtestvo.repository.ItemRepository;
 
 @Component
@@ -35,6 +35,9 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Resource
 	ItemRepository itemRepository;
+	
+	@Resource
+	AnswerRepository answerRepository;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -85,6 +88,21 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public void removeItem(Long itemId) {
 		itemRepository.delete(itemId);
+	}
+	
+	
+	public Item findItem(Long itemId) {
+		return itemRepository.findOne(itemId);
+	}
+
+	@Override
+	public List<Item> findAllItems() {
+		return itemRepository.findAll();
+	}
+
+	@Override
+	public List<Answer> findAnswersForItem(Long itemId) {
+		return answerRepository.findForQuestion(itemId);
 	}
 
 }
