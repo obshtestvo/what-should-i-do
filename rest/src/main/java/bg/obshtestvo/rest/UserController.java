@@ -1,5 +1,7 @@
 package bg.obshtestvo.rest;
 
+import javax.validation.Valid;
+import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +29,6 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -51,15 +53,19 @@ public class UserController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response registerUser(User user) {
-		
+	public Response registerUser(@Valid User user) {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return Response.ok(userService.createOrUpdateUser(user))
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
-				.build();
+		if(user.getPassword() != null) {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		try {
+			return Response.ok(userService.createOrUpdateUser(user))
+					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
+					.build();
+		} catch(ValidationException e) {
+			return Response.status(Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
+		}	
 	}
-	 
 	
 	@Path("/{id}")
 	@DELETE
@@ -71,10 +77,16 @@ public class UserController {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateUser(User user) {
+	public Response updateUser(@Valid User user) {
 		
-		return Response.ok(userService.createOrUpdateUser(user))
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
-				.build();
+		try {
+			return Response.ok(userService.createOrUpdateUser(user))
+					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
+					.build();
+		} catch(ValidationException e) {
+			return Response.status(Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
+		}
+
+		
 	}
 }

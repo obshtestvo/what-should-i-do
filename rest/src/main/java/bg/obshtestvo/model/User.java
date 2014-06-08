@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Email;
 
 @Entity
 @Table(name = "user")
@@ -17,9 +20,11 @@ public class User {
 	private Long userId;
 	
 	@Column(name = "username", nullable = false, unique = true)
+	@NotNull
 	private String username;
 	
 	@Column(name = "password", nullable = false)
+	@NotNull
 	private String password;
 	
 	@Column(name = "firstName")
@@ -29,6 +34,7 @@ public class User {
 	private String lastName;
 	
 	@Column(name = "email")
+	@Email
 	private String email;
 	
 	@Column(name = "age")
