@@ -1,5 +1,7 @@
 package bg.obshtestvo.rest;
 
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
@@ -10,18 +12,19 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import bg.obshtestvo.model.ErrorEntity;
 import bg.obshtestvo.model.User;
 import bg.obshtestvo.service.UserService;
+
+
 
 @Component
 @Path("users")
@@ -29,24 +32,23 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private UserService userService;
+	private static String NULL_IS_NOT_VALID_VALUE = "Null is not a valid value for parameter";
+	private static int NULL_IS_NOT_VALID_VALUE_STATUS_CODE = 1;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllUsers() {
 		
-		return Response.ok(userService.getAllUsers()) 
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
-				.build();
+		return  BaseController.buildResponse(userService.getAllUsers());
 	}
 	
+	@DenyAll
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserById(@PathParam("id") int id) {
 		
-		return Response.ok(userService.getUser(id)) 
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
-				.build();
+		return BaseController.buildResponse(userService.getUser(id));
 	}
 	
 	@Path("/register")
@@ -59,11 +61,12 @@ public class UserController extends BaseController {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 		}
 		try {
-			return Response.ok(userService.createOrUpdateUser(user))
-					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
-					.build();
+			return BaseController.buildResponse(userService.createOrUpdateUser(user));
 		} catch(ValidationException e) {
-			return Response.status(Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
+			ErrorEntity error = new ErrorEntity();
+			error.setMessage(NULL_IS_NOT_VALID_VALUE);
+			error.setStatus(NULL_IS_NOT_VALID_VALUE_STATUS_CODE);
+			return BaseController.buildErrorResponse(error);
 		}	
 	}
 	
@@ -80,11 +83,12 @@ public class UserController extends BaseController {
 	public Response updateUser(@Valid User user) {
 		
 		try {
-			return Response.ok(userService.createOrUpdateUser(user))
-					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
-					.build();
+			return BaseController.buildResponse(userService.createOrUpdateUser(user));
 		} catch(ValidationException e) {
-			return Response.status(Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
+			ErrorEntity error = new ErrorEntity();
+			error.setMessage(NULL_IS_NOT_VALID_VALUE);
+			error.setStatus(NULL_IS_NOT_VALID_VALUE_STATUS_CODE);
+			return BaseController.buildErrorResponse(error);
 		}
 
 		

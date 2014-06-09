@@ -3,8 +3,8 @@ package bg.obshtestvo.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,13 +16,10 @@ import javax.persistence.Table;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
-
-import bg.obshtestvo.utils.CollectionToCSVBridge;
 
 @Entity
 @Indexed
@@ -37,24 +34,27 @@ public class Item {
 	@Column(name = "date_created")
 	private Date dateCreated;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "author_id")
-	private UserSecurityDetails author;
+	private User author;
 
 	@IndexedEmbedded
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.PERSIST)
 	private List<Answer> answers;
 
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	@Column(name="alias")
 	private String alias;
 
+	/*@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+	@Column (name = "tags")*/
+/*	@ElementCollection
+	@FieldBridge(impl = CollectionToCSVBridge.class)*/
+	@IndexedEmbedded
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
-	@Column (name = "tags")
-	@ElementCollection
-	@FieldBridge(impl = CollectionToCSVBridge.class)
-	private List<String> tags;
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	private List<Tag> tags;
 
 	public Long getId() {
 		return id;
@@ -72,7 +72,7 @@ public class Item {
 		this.dateCreated = dateCreated;
 	}
 
-	public UserSecurityDetails getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
 
@@ -88,11 +88,11 @@ public class Item {
 		this.answers = answers;
 	}
 
-	public List<String> getTags() {
+	public List<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<String> tags) {
+	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
 

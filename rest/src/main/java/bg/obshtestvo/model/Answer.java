@@ -2,6 +2,7 @@ package bg.obshtestvo.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,14 +33,14 @@ public class Answer {
 	@Column(name = "number_of_votes")
 	private Integer numberOfVotes;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "author_id")
 	private User author;
 
-	@ManyToMany(mappedBy = "answers")
+	@ManyToMany(mappedBy = "answers", cascade = CascadeType.PERSIST)
 	private List<Item> items;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "answer")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "answer", cascade = CascadeType.PERSIST)
 	private List<Comment> comments;
 	
 	public Long getId() {
