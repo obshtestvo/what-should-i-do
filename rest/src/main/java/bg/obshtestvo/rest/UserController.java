@@ -1,6 +1,5 @@
 package bg.obshtestvo.rest;
 
-import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -17,8 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import bg.obshtestvo.model.ErrorEntity;
@@ -37,15 +34,12 @@ public class UserController extends BaseController {
 	private static String NULL_IS_NOT_VALID_VALUE = "Null is not a valid value for parameter";
 	private static int NULL_IS_NOT_VALID_VALUE_STATUS_CODE = 1;
 
-	@RolesAllowed("admin")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllUsers() {
-		
 		return  BaseController.buildResponse(userService.getAllUsers());
 	}
 	
-	@DenyAll
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -53,25 +47,14 @@ public class UserController extends BaseController {
 		return BaseController.buildResponse(userService.getUser(id));
 	}
 	
-	@Path("/register")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response registerUser(@Valid User user) {
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		if(user.getPassword() != null) {
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
-		}
-		try {
-			return BaseController.buildResponse(userService.createOrUpdateUser(user));
-		} catch(ValidationException e) {
-			ErrorEntity error = new ErrorEntity();
-			error.setMessage(NULL_IS_NOT_VALID_VALUE);
-			error.setStatus(NULL_IS_NOT_VALID_VALUE_STATUS_CODE);
-			return BaseController.buildErrorResponse(error);
-		}	
+		return updateUser(user);
 	}
 	
+	@RolesAllowed("ADMIN")
 	@Path("/{id}")
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -79,11 +62,11 @@ public class UserController extends BaseController {
 		userService.removeUser(id);
 	}
 	
+	@RolesAllowed("USER")
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateUser(@Valid User user) {
-		
 		try {
 			return BaseController.buildResponse(userService.createOrUpdateUser(user));
 		} catch(ValidationException e) {
@@ -92,7 +75,5 @@ public class UserController extends BaseController {
 			error.setStatus(NULL_IS_NOT_VALID_VALUE_STATUS_CODE);
 			return BaseController.buildErrorResponse(error);
 		}
-
-		
 	}
 }

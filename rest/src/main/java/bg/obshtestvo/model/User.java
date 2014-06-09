@@ -1,10 +1,9 @@
 package bg.obshtestvo.model;
 
+import java.security.Principal;
 import java.util.List;
 
-
 import javax.persistence.CascadeType;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Fetch;
@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.Email;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Principal {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -181,6 +181,12 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	@Override
+	@Transient
+	public String getName() {
+		return username;
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
-import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -72,7 +72,7 @@ public class ApplicationContext {
 				.setPackagesToScan(environment
 						.getRequiredProperty(PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN));
 		entityManagerFactoryBean
-				.setPersistenceProviderClass(HibernatePersistence.class);
+				.setPersistenceProviderClass(HibernatePersistenceProvider.class);
 
 		Properties jpaProperties = new Properties();
 		jpaProperties.put(PROPERTY_NAME_HIBERNATE_DIALECT, environment

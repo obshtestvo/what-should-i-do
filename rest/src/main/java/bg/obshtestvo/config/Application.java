@@ -6,6 +6,8 @@ import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 
+import bg.obshtestvo.config.security.SecurityContextConfigFilter;
+
 public class Application extends ResourceConfig{
 	public Application() {
 		// Validation errors won't be sent to the client.
@@ -16,7 +18,8 @@ public class Application extends ResourceConfig{
 		register(RequestContextFilter.class);
 		//Jackson
 		register(JacksonFeature.class);
-		//JAX-RS annotation based security
+		//JAX-RS annotation based security with custom SecurityContext implementation
+		register(SecurityContextConfigFilter.class);
 		register(RolesAllowedDynamicFeature.class);
 	}
 }
