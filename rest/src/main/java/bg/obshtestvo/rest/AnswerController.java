@@ -1,7 +1,12 @@
 package bg.obshtestvo.rest;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,5 +22,13 @@ public class AnswerController extends BaseController {
 	@POST
 	public void createAnswer(Answer answer) {
 		answerService.createOrUpdateAnswer(answer);
+	}
+	
+	@GET
+	@Path("/{id}")
+	public Response getAnswer(@PathParam("id") Long answerId) {
+		return Response.ok(answerService.findAnswer(answerId))
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON + "; charset=utf-8")
+				.build();
 	}
 }

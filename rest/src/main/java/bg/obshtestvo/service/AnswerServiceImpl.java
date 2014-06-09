@@ -5,9 +5,12 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.springframework.stereotype.Component;
+
 import bg.obshtestvo.model.Answer;
 import bg.obshtestvo.repository.AnswerRepository;
 
+@Component
 public class AnswerServiceImpl implements AnswerService {
 
 	@Resource

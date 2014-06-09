@@ -2,7 +2,9 @@ package bg.obshtestvo.model;
 
 import java.util.List;
 
+
 import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,6 +50,7 @@ public class User {
 	private Integer age;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author", cascade = CascadeType.PERSIST)
+
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Item> items;
 
@@ -55,7 +58,9 @@ public class User {
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Answer> answers;
 
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userId", cascade = CascadeType.PERSIST)
+
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Vote> votes;
 
@@ -177,4 +182,5 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
 }

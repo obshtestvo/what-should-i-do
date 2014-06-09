@@ -18,7 +18,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 @Configuration
 @ComponentScan(basePackages = { "bg.obshtestvo", "bg.obshtestvo.rest",
-		"bg.obshtestvo.service" })
+		"bg.obshtestvo.service", "bg.obshtestvo.security" })
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories(basePackages = { "bg.obshtestvo.repository" })
 public class ApplicationContext {
