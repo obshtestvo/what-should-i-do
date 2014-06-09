@@ -62,7 +62,7 @@ public class UserController extends BaseController {
 		userService.removeUser(id);
 	}
 	
-	@RolesAllowed("USER")
+	@RolesAllowed({"USER","ADMIN"})
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

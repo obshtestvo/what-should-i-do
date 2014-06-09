@@ -1,5 +1,7 @@
 package bg.obshtestvo.rest;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -14,12 +16,14 @@ import bg.obshtestvo.model.Answer;
 import bg.obshtestvo.service.AnswerService;
 
 @Path("answers")
+@PermitAll
 public class AnswerController extends BaseController {
 
 	@Autowired	
 	AnswerService answerService;
 
 	@POST
+	@RolesAllowed({"ADMIN","USER"})
 	public void createAnswer(Answer answer) {
 		answerService.createOrUpdateAnswer(answer);
 	}
