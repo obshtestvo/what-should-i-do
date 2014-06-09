@@ -1,11 +1,14 @@
 package bg.obshtestvo.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -57,6 +60,9 @@ public class User {
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
 	private List<Comment> comments;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+	private List<Session> sessions;
 	
 	public User() {
 		
@@ -150,6 +156,14 @@ public class User {
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+
+	public List<Session> getSessions() {
+		return sessions;
+	}
+
+	public void setSessions(List<Session> sessions) {
+		this.sessions = sessions;
 	}
 
 }
