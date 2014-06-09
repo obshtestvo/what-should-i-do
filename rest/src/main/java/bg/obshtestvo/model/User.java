@@ -24,28 +24,28 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Long userId;
-	
+
 	@Column(name = "username", nullable = false, unique = true)
 	@NotNull
 	private String username;
-	
+
 	@Column(name = "password", nullable = false)
 	@NotNull
 	private String password;
-	
+
 	@Column(name = "firstName")
 	private String firstName;
-	
+
 	@Column(name = "lastName")
 	private String lastName;
-	
+
 	@Column(name = "email")
 	@Email
 	private String email;
-	
+
 	@Column(name = "age")
 	private Integer age;
-	
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Item> items;
@@ -53,21 +53,24 @@ public class User {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Answer> answers;
-	
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userId")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Vote> votes;
-	
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
 	private List<Comment> comments;
-	
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
 	private List<Session> sessions;
-	
+
+	@Column
+	private String role;
+
 	public User() {
-		
+
 	}
-	
+
 	public User(String username, String password, String firstName,
 			String lastName, String email, Integer age) {
 		this.username = username;
@@ -164,6 +167,14 @@ public class User {
 
 	public void setSessions(List<Session> sessions) {
 		this.sessions = sessions;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

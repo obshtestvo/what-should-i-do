@@ -1,5 +1,7 @@
 package bg.obshtestvo.rest;
 
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
@@ -39,6 +41,7 @@ public class UserController extends BaseController {
 				.build();
 	}
 	
+	@DenyAll
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
