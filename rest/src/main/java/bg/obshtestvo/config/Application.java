@@ -5,6 +5,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 
+import bg.obshtestvo.config.security.SecurityInterceptor;
+
 public class Application extends ResourceConfig{
 	public Application() {
 		// Validation errors won't be sent to the client.
@@ -15,5 +17,7 @@ public class Application extends ResourceConfig{
 		register(RequestContextFilter.class);
 		//Jackson
 		register(JacksonFeature.class);
+		//Security Interceptor
+		register(SecurityInterceptor.class);
 	}
 }

@@ -11,34 +11,27 @@ import java.util.StringTokenizer;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.Provider;
 
+import org.glassfish.jersey.server.ExtendedUriInfo;
+import org.glassfish.jersey.server.model.ResourceMethod;
 import org.jboss.resteasy.annotations.interception.Precedence;
 import org.jboss.resteasy.annotations.interception.ServerInterceptor;
 import org.jboss.resteasy.core.Headers;
 import org.jboss.resteasy.core.ResourceMethodInvoker;
 import org.jboss.resteasy.core.ServerResponse;
-import org.jboss.resteasy.spi.Failure;
-import org.jboss.resteasy.spi.HttpRequest;
-import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
 import org.jboss.resteasy.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import bg.obshtestvo.repository.UserRepository;
 
-@Component
-@Provider
 @ServerInterceptor
 @PreMatching
 @Precedence("SECURITY")
-public class SecurityInterceptor implements ContainerRequestFilter {//DEPRECATED: PreProcessInterceptor {
+public class SecurityInterceptor implements ContainerRequestFilter {
 	private static final String AUTHORIZATION_PROPERTY = "Authorization";
 	private static final String AUTHENTICATION_SCHEME = "Basic";
 	private static final ServerResponse ACCESS_DENIED = new ServerResponse(
@@ -54,64 +47,64 @@ public class SecurityInterceptor implements ContainerRequestFilter {//DEPRECATED
 	@Override
 	public void filter(ContainerRequestContext requestContext)
 			throws IOException {
-		ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker) requestContext
-				.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
-		Method method = methodInvoker.getMethod();
-		if (!method.isAnnotationPresent(PermitAll.class)) {
-			if (method.isAnnotationPresent(DenyAll.class)) {
-				requestContext.abortWith(ACCESS_FORBIDDEN);
-				return;
-			}
+		Method method = ((ExtendedUriInfo) requestContext.getUriInfo())
+			    .getMatchedResourceMethod().getInvocable().getHandlingMethod();
+		if (method.isAnnotationPresent(PermitAll.class)) {
+			return;
+		}
+		if (method.isAnnotationPresent(DenyAll.class)) {
+			requestContext.abortWith(ACCESS_FORBIDDEN);
+			return;
+		}
 
-			final MultivaluedMap<String, String> headers = requestContext
-					.getHeaders();
+		final MultivaluedMap<String, String> headers = requestContext
+				.getHeaders();
 
-			// Fetch authorization header
-			final List<String> authorization = headers
-					.get(AUTHORIZATION_PROPERTY);
+		// Fetch authorization header
+		final List<String> authorization = headers
+				.get(AUTHORIZATION_PROPERTY);
 
-			// If no authorization information present; block access
-			if (authorization == null || authorization.isEmpty()) {
+		// If no authorization information present; block access
+		if (authorization == null || authorization.isEmpty()) {
+			requestContext.abortWith(ACCESS_DENIED);
+			return;
+		}
+
+		// Get encoded username and password
+		final String encodedUserPassword = authorization.get(0)
+				.replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+
+		// Decode username and password
+		String usernameAndPassword = null;
+		try {
+			usernameAndPassword = new String(
+					Base64.decode(encodedUserPassword));
+		} catch (IOException e) {
+			requestContext.abortWith(SERVER_ERROR);
+			return;
+		}
+
+		// Split username and password tokens
+		final StringTokenizer tokenizer = new StringTokenizer(
+				usernameAndPassword, ":");
+		final String username = tokenizer.nextToken();
+		final String password = tokenizer.nextToken();
+
+		// Verifying Username and password
+		System.out.println(username);
+		System.out.println(password);
+
+		// Verify user access
+		if (method.isAnnotationPresent(RolesAllowed.class)) {
+			RolesAllowed rolesAnnotation = method
+					.getAnnotation(RolesAllowed.class);
+			Set<String> rolesSet = new HashSet<String>(
+					Arrays.asList(rolesAnnotation.value()));
+
+			// Is user valid?
+			if (!isUserAllowed(username, password, rolesSet)) {
 				requestContext.abortWith(ACCESS_DENIED);
 				return;
-			}
-
-			// Get encoded username and password
-			final String encodedUserPassword = authorization.get(0)
-					.replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-
-			// Decode username and password
-			String usernameAndPassword = null;
-			try {
-				usernameAndPassword = new String(
-						Base64.decode(encodedUserPassword));
-			} catch (IOException e) {
-				requestContext.abortWith(SERVER_ERROR);
-				return;
-			}
-
-			// Split username and password tokens
-			final StringTokenizer tokenizer = new StringTokenizer(
-					usernameAndPassword, ":");
-			final String username = tokenizer.nextToken();
-			final String password = tokenizer.nextToken();
-
-			// Verifying Username and password
-			System.out.println(username);
-			System.out.println(password);
-
-			// Verify user access
-			if (method.isAnnotationPresent(RolesAllowed.class)) {
-				RolesAllowed rolesAnnotation = method
-						.getAnnotation(RolesAllowed.class);
-				Set<String> rolesSet = new HashSet<String>(
-						Arrays.asList(rolesAnnotation.value()));
-
-				// Is user valid?
-				if (!isUserAllowed(username, password, rolesSet)) {
-					requestContext.abortWith(ACCESS_DENIED);
-					return;
-				}
 			}
 		}
 	}
