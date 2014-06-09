@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import bg.obshtestvo.model.Item;
@@ -30,7 +29,6 @@ public class ItemController extends BaseController {
 	
 	@GET
 	@Path("/{id}")
-	@PreAuthorize(value = "hasRole('ROLE_USER')")
 	public Response getItem(@PathParam("id") Long itemId) {
 		return BaseController.buildResponse(itemService.findItem(itemId));
 	}

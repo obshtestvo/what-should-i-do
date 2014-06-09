@@ -3,9 +3,8 @@ package bg.obshtestvo.config;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-
-import bg.obshtestvo.config.security.SecurityInterceptor;
 
 public class Application extends ResourceConfig{
 	public Application() {
@@ -17,7 +16,7 @@ public class Application extends ResourceConfig{
 		register(RequestContextFilter.class);
 		//Jackson
 		register(JacksonFeature.class);
-		//Security Interceptor
-		register(SecurityInterceptor.class);
+		//JAX-RS annotation based security
+		register(RolesAllowedDynamicFeature.class);
 	}
 }

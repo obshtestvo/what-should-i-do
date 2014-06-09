@@ -1,6 +1,7 @@
 package bg.obshtestvo.rest;
 
 import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -27,6 +28,7 @@ import bg.obshtestvo.service.UserService;
 
 
 @Component
+@PermitAll
 @Path("users")
 public class UserController extends BaseController {
 
@@ -35,6 +37,7 @@ public class UserController extends BaseController {
 	private static String NULL_IS_NOT_VALID_VALUE = "Null is not a valid value for parameter";
 	private static int NULL_IS_NOT_VALID_VALUE_STATUS_CODE = 1;
 
+	@RolesAllowed("admin")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllUsers() {
@@ -47,7 +50,6 @@ public class UserController extends BaseController {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserById(@PathParam("id") int id) {
-		
 		return BaseController.buildResponse(userService.getUser(id));
 	}
 	
