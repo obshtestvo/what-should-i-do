@@ -10,6 +10,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 public class UserSecurityDetails extends User implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public UserSecurityDetails() {
+		
+	}
+
+	public UserSecurityDetails(String username, String password,
+			String firstName, String lastName, String email, Integer age) {
+		super(username, password, firstName, lastName, email, age);
+
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
@@ -18,8 +33,7 @@ public class UserSecurityDetails extends User implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getPassword();
 	}
 
 	@Override

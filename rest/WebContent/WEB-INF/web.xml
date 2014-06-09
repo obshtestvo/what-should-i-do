@@ -28,6 +28,15 @@
 		 <url-pattern>/api/*</url-pattern>
 	 </servlet-mapping>
 	 
+     <context-param>
+    	<param-name>resteasy.providers</param-name>
+    	<param-value>bg.obshtestvo.security.SecurityInterceptor</param-value>
+	</context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>bg.obshtestvo.config.ApplicationContext,bg.obshtestvo.config.security.SecurityConfig</param-value>
+    </context-param>
+	 
 	 <context-param>
         <param-name>contextClass</param-name>
         <param-value>
@@ -35,10 +44,6 @@
         </param-value>
     </context-param>
 
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>bg.obshtestvo.config.ApplicationContext,bg.obshtestvo.config.security.SecurityConfig</param-value>
-    </context-param>
 	 
 	 <listener>
 		 <listener-class>

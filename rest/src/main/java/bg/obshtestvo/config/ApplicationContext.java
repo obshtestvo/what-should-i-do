@@ -17,9 +17,10 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 @Configuration
-@ComponentScan(basePackages = { "bg.obshtestvo.rest", "bg.obshtestvo.service" })
+@ComponentScan(basePackages = { "bg.obshtestvo", "bg.obshtestvo.rest",
+		"bg.obshtestvo.service", "bg.obshtestvo.security" })
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories(basePackages = {"bg.obshtestvo.repository"})
+@EnableJpaRepositories(basePackages = { "bg.obshtestvo.repository" })
 public class ApplicationContext {
 	private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
 	private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
@@ -31,6 +32,11 @@ public class ApplicationContext {
 	private static final String PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY = "hibernate.ejb.naming_strategy";
 	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 	private static final String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
+	private static final String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
+	
+	private static final String PROPERTY_NAME_HIBERNATE_SEARCH_DIR_PROVIDER = 
+			"hibernate.search.default.directory_provider";
+	private static final String PROPERTY_NAME_HIBERNATE_SEARCH_INDEX_BASE = "hibernate.search.default.indexBase";
 
 	@Resource
 	private Environment environment;
@@ -60,6 +66,7 @@ public class ApplicationContext {
 			throws ClassNotFoundException {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
+		entityManagerFactoryBean.setPersistenceUnitName("local");
 		entityManagerFactoryBean.setDataSource(dataSource());
 		entityManagerFactoryBean
 				.setPackagesToScan(environment
@@ -67,17 +74,22 @@ public class ApplicationContext {
 		entityManagerFactoryBean
 				.setPersistenceProviderClass(HibernatePersistence.class);
 
-		Properties jpaProterties = new Properties();
-		jpaProterties.put(PROPERTY_NAME_HIBERNATE_DIALECT, environment
+		Properties jpaProperties = new Properties();
+		jpaProperties.put(PROPERTY_NAME_HIBERNATE_DIALECT, environment
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-		jpaProterties.put(PROPERTY_NAME_HIBERNATE_FORMAT_SQL, environment
+		jpaProperties.put(PROPERTY_NAME_HIBERNATE_FORMAT_SQL, environment
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_FORMAT_SQL));
-		jpaProterties.put(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY, environment
+		jpaProperties.put(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY, environment
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY));
-		jpaProterties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, environment
+		jpaProperties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, environment
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
-
-		entityManagerFactoryBean.setJpaProperties(jpaProterties);
+		jpaProperties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, environment
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
+		jpaProperties.put(PROPERTY_NAME_HIBERNATE_SEARCH_DIR_PROVIDER, environment
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SEARCH_DIR_PROVIDER));
+		jpaProperties.put(PROPERTY_NAME_HIBERNATE_SEARCH_INDEX_BASE, environment
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SEARCH_INDEX_BASE));
+		entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
 		return entityManagerFactoryBean;
 	}

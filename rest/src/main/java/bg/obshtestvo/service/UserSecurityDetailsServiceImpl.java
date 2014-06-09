@@ -18,7 +18,12 @@ public class UserSecurityDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String arg0)
 			throws UsernameNotFoundException {
-		throw new UsernameNotFoundException("PENIS");
+		throw new UsernameNotFoundException("Viktoriya");
 	}
-
+	
+/*	public void registerUser(String username, String password, String firstName, String lastName, String email, Date birthDate) {
+		UserSecurityDetails user = new UserSecurityDetails(username, password, firstName, lastName, email, birthDate);
+		userDetailsRepository.save(user);
+	}
+*/
 }
