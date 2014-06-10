@@ -7,7 +7,7 @@
  * # RegisterCtrl
  * Controller of the uiApp
  */
-angular.module('uiApp', ['services'])
+angular.module('uiApp')
   .controller('RegisterCtrl', ['$scope', '$location', 'User',
   	function ($scope, $location, User) {
     $scope.user = new User({});

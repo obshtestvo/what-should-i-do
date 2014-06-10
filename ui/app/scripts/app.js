@@ -8,16 +8,18 @@
  *
  * Main module of the application.
  */
-angular.module('configuration', [])
-       .constant('API_END_POINT','http://localhost:8080/rest/api');
 
-var app = angular.module('uiApp', 
-	['ngRoute']);
+angular.module('conf', [])
+	.constant('ENDPOINT','http://localhost:8080/rest/api');
+
+var app = angular.module('uiApp', ['ngRoute', 'directives']);
 
 app.config(['$routeProvider', function($routeProvider) {
-	$routeProvider.
-		when('/register', {
+	$routeProvider
+		.when('/about', {
+			templateUrl: '/views/about.html'
+		}).when('/register', {
 			controller: 'RegisterCtrl',
 			templateUrl: '/views/register.html'
-		}).otherwise({redirectTo:'/views/404.html'});
+		});
 }]);

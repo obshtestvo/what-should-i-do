@@ -1,11 +1,15 @@
 <form name="userForm" ng-submit="save()">
 	<div>
 		<label for="username">Username:</label>
-		<input ng-model="user.username" id="username" focus/>
+		<input ng-model="user.username" id="username" />
+	</div>
+	<div>
+		<label for="password">Password:</label>
+		<input ng-model="user.password" id="password" type="password" />
 	</div>
 	<div>
 		<label for="email">Email:</label>
-		<input ng-model="user.email" id="email"/>
+		<input ng-model="user.email" id="email" email/>
 	</div>
 	<div>
 		<label for="firstName">First Name:</label>
