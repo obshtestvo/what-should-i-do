@@ -1,6 +1,7 @@
 package bg.obshtestvo.model;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,36 +14,49 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "answers")
 public class Answer {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@Column(name = "content")
 	private String content;
-	
+
 	@Column(name = "score")
 	private Integer score;
-	
+
 	@Column(name = "number_of_votes")
 	private Integer numberOfVotes;
-	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.TRUE)
 	@JoinColumn(name = "author_id")
+	@JsonIgnore
 	private User author;
 
-	@ManyToMany(mappedBy = "answers", cascade = CascadeType.PERSIST)
-	private List<Item> items;
-
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "answer", cascade = CascadeType.PERSIST)
-	private List<Comment> comments;
+	@ManyToMany(mappedBy = "answers", cascade = CascadeType.ALL)
+	@OrderColumn(name = "ID")
+	@LazyCollection(LazyCollectionOption.TRUE)
+	@JsonIgnore
+	private Set<Item> items;
 	
+	@OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
+	@OrderColumn(name = "ID")
+	@LazyCollection(LazyCollectionOption.TRUE)
+	@JsonIgnore
+	private Set<Comment> comments;
+
 	public Long getId() {
 		return id;
 	}
@@ -75,12 +89,20 @@ public class Answer {
 		this.score = score;
 	}
 
-	public List<Item> getItems() {
+	public Set<Item> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(Set<Item> items) {
 		this.items = items;
+	}
+
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
 	}
 
 }

@@ -2,6 +2,7 @@ package bg.obshtestvo.model;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,12 +12,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.Email;
 
 @Entity
@@ -49,26 +54,36 @@ public class User implements Principal {
 	@Column(name = "age")
 	private Integer age;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author", cascade = CascadeType.PERSIST)
+	@OneToMany( mappedBy = "author", cascade = CascadeType.ALL)
+	@OrderColumn(name = "ID")
+	@LazyCollection(LazyCollectionOption.TRUE)
+	@JsonIgnore
+	private Set<Item> items;
 
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Item> items;
+	@OneToMany( mappedBy = "author", cascade = CascadeType.ALL)
+	@OrderColumn(name = "ID")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
+	private Set<Answer> answers;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author", cascade = CascadeType.PERSIST)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Answer> answers;
 
+	@OneToMany( mappedBy = "userId", cascade = CascadeType.ALL)
+	@OrderColumn(name = "ID")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
+	private Set<Vote> votes;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userId", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "author")
+	@OrderColumn(name = "ID")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
+	private Set<Comment> comments;
 
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Vote> votes;
-
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
-	private List<Comment> comments;
-
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-	private List<Session> sessions;
+	@OneToMany( mappedBy = "user")
+	@OrderColumn(name = "ID")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
+	private Set<Session> sessions;
 
 	@Column
 	private String role;
@@ -143,35 +158,35 @@ public class User implements Principal {
 		this.age = age;
 	}
 
-	public List<Answer> getAnswers() {
+	public Set<Answer> getAnswers() {
 		return answers;
 	}
 
-	public void setAnswers(List<Answer> answers) {
+	public void setAnswers(Set<Answer> answers) {
 		this.answers = answers;
 	}
 
-	public List<Vote> getVotes() {
+	public Set<Vote> getVotes() {
 		return votes;
 	}
 
-	public void setVotes(List<Vote> votes) {
+	public void setVotes(Set<Vote> votes) {
 		this.votes = votes;
 	}
 
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 
-	public List<Session> getSessions() {
+	public Set<Session> getSessions() {
 		return sessions;
 	}
 
-	public void setSessions(List<Session> sessions) {
+	public void setSessions(Set<Session> sessions) {
 		this.sessions = sessions;
 	}
 

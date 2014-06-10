@@ -1,18 +1,26 @@
 package bg.obshtestvo.model;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
@@ -34,27 +42,26 @@ public class Item {
 	@Column(name = "date_created")
 	private Date dateCreated;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "author_id")
 	private User author;
 
-	@IndexedEmbedded
-	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	private List<Answer> answers;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OrderColumn(name = "ID")
+	private Set<Answer> answers;
 
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	@Column(name="alias")
 	private String alias;
 
-	/*@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
-	@Column (name = "tags")*/
-/*	@ElementCollection
-	@FieldBridge(impl = CollectionToCSVBridge.class)*/
 	@IndexedEmbedded
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	private List<Tag> tags;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SUBSELECT)
+	@LazyCollection(LazyCollectionOption.TRUE)
+	@OrderColumn(name="ID")
+	private Set<Tag> tags;
 
 	public Long getId() {
 		return id;
@@ -80,19 +87,19 @@ public class Item {
 		this.author = author;
 	}
 
-	public List<Answer> getAnswers() {
+	public Set<Answer> getAnswers() {
 		return answers;
 	}
 
-	public void setAnswers(List<Answer> answers) {
+	public void setAnswers(Set<Answer> answers) {
 		this.answers = answers;
 	}
 
-	public List<Tag> getTags() {
+	public Set<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) {
+	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
 	}
 

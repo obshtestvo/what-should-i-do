@@ -2,6 +2,8 @@ package bg.obshtestvo.rest;
 
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,6 +24,7 @@ import bg.obshtestvo.service.ItemService;
 
 @Component
 @Path("items")
+@PermitAll
 public class ItemController extends BaseController {
 
 	@Autowired
@@ -46,12 +49,14 @@ public class ItemController extends BaseController {
 	}
 	
 	@DELETE
+	@RolesAllowed("ADMIN")
 	@Path("/{id}")
 	public void deleteItem(@PathParam("id") Long itemId) {
 		itemService.removeItem(itemId);
 	}
 	
 	@POST
+	@RolesAllowed({"USER","ADMIN"})
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void createItem(Item item) {
@@ -59,6 +64,7 @@ public class ItemController extends BaseController {
 	}
 	
 	@PUT
+	@RolesAllowed({"USER","ADMIN"})
 	public void updateItem(Item item) {
 		itemService.createOrUpdateItem(item);
 	}
@@ -70,6 +76,7 @@ public class ItemController extends BaseController {
 	}
 	
 	@POST
+	@RolesAllowed({"USER","ADMIN"})
 	@Path("/{id}/tags")
 	public void addTagsToItem(@PathParam("id") Long itemId, List<String> tags) {
 		
