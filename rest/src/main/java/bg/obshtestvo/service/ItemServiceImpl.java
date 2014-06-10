@@ -15,6 +15,7 @@ import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.search.FullTextSession;
+import org.hibernate.search.MassIndexer;
 import org.hibernate.search.Search;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
@@ -49,6 +50,12 @@ public class ItemServiceImpl implements ItemService {
 		Session session = (Session) fullTextEntityManager.getDelegate();
 		FullTextSession fullTextSession = Search.getFullTextSession(session);
 		
+//		MassIndexer massIndexer = fullTextSession.createIndexer();
+//		try {
+//			fullTextSession.createIndexer().start();
+/*		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
 		Transaction transaction = fullTextSession.beginTransaction();
 		fullTextSession.setFlushMode(FlushMode.MANUAL);
 		fullTextSession.setCacheMode(CacheMode.IGNORE);
@@ -71,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
 		QueryBuilder qb = fullTextEntityManager.getSearchFactory()
 				.buildQueryBuilder().forEntity(Item.class).get();
 		Query query = qb.keyword().fuzzy()
-				.onFields("tags", "alias").ignoreFieldBridge().matching(searchString).createQuery();
+				.onFields("alias", "tagName").ignoreFieldBridge().matching(searchString).createQuery();
 		FullTextQuery ftq = fullTextEntityManager.createFullTextQuery(query, Item.class);
 		resultList = ftq.getResultList();
 		em.getTransaction().commit();
