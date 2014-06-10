@@ -9,10 +9,7 @@
  * Main module of the application.
  */
 
-angular.module('conf', [])
-	.constant('ENDPOINT','http://localhost:8080/rest/api');
-
-var app = angular.module('uiApp', ['ngRoute', 'directives']);
+var app = angular.module('uiApp', ['ngRoute', 'app-controllers', 'app-directives']);
 
 app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider

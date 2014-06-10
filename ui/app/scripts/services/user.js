@@ -7,7 +7,8 @@
  * # User
  * Service in the uiApp.
  */
-// angular.module('uiApp', ['ngResource', 'conf'])
-//   .factory('User', ['$resource', 'ENDPOINT', function($resource, ENDPOINT) {
-//     return $resource(ENDPOINT + '/users/:id', {userId: '@id'});
-// }]);
+ angular.module('app-services', ['ngResource', 'app-conf'])
+   .factory('User', ['$resource', 'ENDPOINT', function($resource, ENDPOINT) {
+     return $resource(ENDPOINT + '/users/:userId', {userId: '@id'},
+		{'update': {method: 'PUT' }});
+ }]);

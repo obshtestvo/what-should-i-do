@@ -6,7 +6,7 @@
  * @description
  * # user
  */
-angular.module('directives', [])
+angular.module('app-directives', [])
   .directive('user', function () {
     return {
       templateUrl: '/views/directives/user.html',
